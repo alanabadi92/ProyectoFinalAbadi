@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/styles.css">
+    <title>Test Eneagrama</title>
+    <link rel="icon" type="image" href="/images/enneagram.png"/>
+    <meta name="description" content="Conoce sobre el Eneagrama. Realiza tu test de personalidad."> 
+    <meta name="keywords" content="Eneagrama, sesiones, personales, empresas, coaching, psicologia">
+</head>
+<body>
+    <header>
+        <h1>Test Eneagrama</h1>
+        <div class="bloqueMenu">
+            <ul class="menu">
+                <li><input type="button" class="botonMenu" id="cargar" value="Cargar resultados"></li>
+                <li><input type="button" class="botonMenu" id="borrar" value="Borrar resultados"></li>
+            </ul>
+        </div>
+    </header>
+    
+    <div>
+        <h2>Instrucciones</h2>
+        <p class="instrucciones">Confirme las afirmaciones con las que se identifica </b></p>
+    </div>
+
+    <form class="formulario" action="" id="formularioAfirmaciones">
+        
+        <label class="etiquetaNombre" >Nombre: </label><input id="inputNombre" class="nombre" type="text" placeholder="Nombre y Apellido">
+        
+        <ul class="listaAfirmaciones" id="listaAfirmaciones">
+            <!-- Aca se crea la lista de afirmaciones mezcladas -->
+        </ul>
+
+        <div class="contenedor">
+            <input type="button" class="botonEnviar" id="enviar" value="Enviar resultados">
+        </div>
+
+    </form>
+
+    <script src="../js/FileSaver.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    padding: 5%;
+    color: rgb(24, 88, 173);
+    text-align: center;
+    border: solid;
+}
+
+h2{
+    padding:5%;
+    text-align: center;
+    text-decoration: underline;
+}
+
+.bloqueMenu{
+    border: solid;
+    color: rgb(24, 88, 173);
+    display: flexbox;
+    text-align: center;
+    border-top: 0px;
+}
+
+.menu li{
+    margin-inline: 10px;
+    list-style: none;
+    display: inline-flex;
+}
+
+.botonMenu{
+    margin-top: 17px;
+    padding: 5px;
+    text-align: center;
+    background-color: rgb(14, 121, 187);
+    border-radius: 10px;
+    color: aliceblue; 
+}
+
+.nombre{
+    padding: 5px;
+    margin: 20px;
+    margin-bottom: 35px;
+}
+
+.etiquetaNombre{
+margin-left: 30px;
+}
+
+h3{
+    padding-left: 15px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-left: solid;
+    border-right: solid;
+    border-color: rgb(24, 88, 173);
+    
+}
+
+.instrucciones{
+    padding-top: 3%;
+    text-align: center;
+    font-size:150%;
+    text-decoration: underline;
+}
+
+.formulario{
+    margin-top: 5%;
+    padding: 5%;
+    color: rgb(24, 88, 173);
+    text-align: left;
+    font-size: 21px;
+    border: solid;
+
+}
+
+
+.listaAfirmaciones > li{
+    display: block;
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+.afirmaciones{
+    color: black;
+    margin-left: 15px;
+}
+
+.contenedor{
+    text-align: center;
+}
+
+.botonEnviar{
+    margin: 50px;
+    padding: 12px;
+    text-align: center;
+    background-color: rgb(14, 121, 187);
+    border-radius: 10px;
+    font-size: large;
+    color: aliceblue;
+    box-shadow: 5px 7px 5px rgba(0, 0, 0, 5);
+}
+
+.seccion > ul{
+    display: flexbox;
+    padding: 20px;
+    border: solid;
+    border-color: rgb(24, 88, 173);
+    border-top: 0;
+    list-style: none;
+}
+
+.devolucion{
+    border: solid;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+li{
+    margin-bottom: 18px;
+}
+
+.grafico{
+    height:400px;
+    padding: 50px;
+    border-left: solid;
+    border-right: solid;
+    border-bottom: solid;
+    border-color: rgb(24, 88, 173);
+
+}
+
+h5{
+    color: rgb(24, 88, 173);
+    text-decoration:underline;
+}
