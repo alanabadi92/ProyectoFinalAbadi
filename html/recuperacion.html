@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/styles.css">
+    <title>Devolución Test Eneagrama</title>
+    <link rel="icon" type="image" href="/images/enneagram.png"/>
+    <meta name="description" content="Conoce sobre el Eneagrama. Realiza tu test de personalidad."> 
+    <meta name="keywords" content="Eneagrama, sesiones, personales, empresas, coaching, psicologia">
+</head>
+<body id="cuerpo">
+    <header>
+        <h1>Test Eneagrama</h1>
+        <div class="bloqueMenu">
+            <ul class="menu">
+                <li><input type="button" class="botonMenu" id="imprimir" value="Descargar PDF"></li>
+            </ul>
+        </div>
+    </header>
+    
+    <div id="resultado" class="seccion">
+
+    </div>
+
+    <div class="grafico">
+        <canvas id="grafico"></canvas>
+    </div>
+
+    <div id="devoluciones" class="seccion">
+
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="../js/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="../js/devolucion.js"></script>
+</body>
+</html>
