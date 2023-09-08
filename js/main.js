@@ -274,15 +274,15 @@ async function pedirArchivo() {
       const reader = new FileReader();
   
       reader.onload = (e) => {
-        // Obtén el contenido del archivo como objeto
+        // Obtengo el contenido del archivo como objeto
         const contenidoJson = JSON.parse(e.target.result);
   
         // Verifica si el contenidoJson es un array y tiene al menos 2 elementos
         if (Array.isArray(contenidoJson) && contenidoJson.length >= 2) {
-          // Obtén el segundo objeto del array (índice 1)
+          // Obtengo el segundo objeto del array (índice 1)
           const objetoDeseado = contenidoJson[1];
   
-          // Almacena el objeto deseado en sessionStorage
+          // Almaceno el objeto deseado en sessionStorage
           sessionStorage.setItem("recuperacion", JSON.stringify(objetoDeseado));
   
           Swal.fire(
@@ -301,7 +301,7 @@ async function pedirArchivo() {
         }
       };
   
-      reader.readAsText(file); // Leemos el archivo como texto
+      reader.readAsText(file);
     }
   }
   
