@@ -1,7 +1,7 @@
 // Variables globales
 let afirmaciones = [];
 let devoluciones = [];
-let respondidas = 0;  // Declaración de 'respondidas' para evitar errores
+let respondidas = 0;  // Variable para contar el total de respuestas seleccionadas
 let porcentajeRespondidas = 0;
 let media = 0;
 let devStandard = 0;
@@ -50,7 +50,7 @@ function mostrarMezclaHtml() {
 
     afirmaciones.forEach(afirmacion => {
         lista.innerHTML += `<li> 
-            <input type="checkbox" onchange="cargarVariables(this)" id=${afirmacion.eneatipo} > 
+            <input type="checkbox" onchange="cargarVariables(this)" id="eneatipo_${afirmacion.eneatipo}" data-eneatipo="${afirmacion.eneatipo}"> 
             <label class="afirmaciones">${afirmacion.texto}</label> 
         </li>`;
     });
@@ -58,11 +58,13 @@ function mostrarMezclaHtml() {
 
 // Función para cargar y validar las selecciones de las afirmaciones
 function cargarVariables(checkbox) {
+    const eneatipo = checkbox.getAttribute('data-eneatipo');
+    
     if (checkbox.checked) {
-        window["e" + checkbox.id]++;
+        window["e" + eneatipo]++;
         respondidas++;
     } else {
-        window["e" + checkbox.id]--;
+        window["e" + eneatipo]--;
         respondidas--;
     }
 }
@@ -79,7 +81,6 @@ function cargarAfirmacionesYMostrarHtml() {
 async function devolver() {
     await fetchDevoluciones();
 
-    // Lógica para asignar las devoluciones a las variables ge1, ge2, ..., ge9
     if ((e1 - media) >= devStandard) {
         ge1 = devoluciones.find(item => item.e === '1' && item.id === 'eneatipo').descripcion;
     } else if ((e1 - media) <= -devStandard) {
