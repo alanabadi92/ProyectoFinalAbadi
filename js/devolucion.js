@@ -175,9 +175,26 @@ if (!usuarioAUtilizar) {
             });
     }
 
+    // Función para descargar el archivo JSON manualmente
+    function descargarJSON() {
+        const datosJSON = JSON.stringify(usuarioAUtilizar, null, 2);
+        const blob = new Blob([datosJSON], { type: 'application/json' });
+        const enlace = document.createElement('a');
+        enlace.href = URL.createObjectURL(blob);
+        enlace.download = `${nombre}.json`;
+        enlace.click();
+    }
+
+    // Botón de descarga del PDF
     const botonImprimir = document.getElementById("imprimir");
     botonImprimir.onclick = () => {
         generarPDF();
+    };
+
+    // Botón de descarga del JSON
+    const botonDescargarJSON = document.getElementById("descargarJSON");
+    botonDescargarJSON.onclick = () => {
+        descargarJSON();
     };
 
     // Muestra los valores y devoluciones en la página
