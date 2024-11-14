@@ -1,14 +1,16 @@
-// Variables globales
+// Variables globales para almacenar datos y respuestas
 let afirmaciones = [];
 let devoluciones = [];
-let respondidas = 0;  // Variable para contar el total de respuestas seleccionadas
+let respondidas = 0;  // Conteo de respuestas seleccionadas
 let porcentajeRespondidas = 0;
 let media = 0;
 let devStandard = 0;
+
+// Variables para cada tipo de respuesta del Eneagrama
 let e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, e6 = 0, e7 = 0, e8 = 0, e9 = 0;
 let ge1 = "", ge2 = "", ge3 = "", ge4 = "", ge5 = "", ge6 = "", ge7 = "", ge8 = "", ge9 = "";
 
-// Función para recuperar afirmaciones desde el JSON
+// Recupera afirmaciones desde el JSON
 const fetchAfirmaciones = async () => {
     try {
         const resp = await fetch('https://raw.githubusercontent.com/alanabadi92/ProyectoFinalAbadi/main/json/afirmaciones.json');
@@ -18,7 +20,7 @@ const fetchAfirmaciones = async () => {
     }
 };
 
-// Función para recuperar devoluciones desde el JSON
+// Recupera devoluciones desde el JSON
 const fetchDevoluciones = async () => {
     try {
         const resp = await fetch('https://raw.githubusercontent.com/alanabadi92/ProyectoFinalAbadi/main/json/devoluciones.json');
@@ -27,16 +29,6 @@ const fetchDevoluciones = async () => {
         console.error('No se pudo cargar las devoluciones:', error);
     }
 };
-
-// Función para guardar datos de usuario en localStorage
-function guardarEnLocalStorage(objeto, nombre) {
-    try {
-        localStorage.setItem(nombre, JSON.stringify(objeto));
-        console.log(`Datos guardados para ${nombre}`);
-    } catch (error) {
-        console.error('Error al guardar en localStorage:', error);
-    }
-}
 
 // Mezcla el contenido de un array
 function shuffleArray(array) {
@@ -50,7 +42,7 @@ function mostrarMezclaHtml() {
 
     afirmaciones.forEach(afirmacion => {
         lista.innerHTML += `<li> 
-            <input type="checkbox" onchange="cargarVariables(this)" id="eneatipo_${afirmacion.eneatipo}" data-eneatipo="${afirmacion.eneatipo}"> 
+            <input type="checkbox" onchange="cargarVariables(this)" data-eneatipo="${afirmacion.eneatipo}"> 
             <label class="afirmaciones">${afirmacion.texto}</label> 
         </li>`;
     });
@@ -60,17 +52,33 @@ function mostrarMezclaHtml() {
 function cargarVariables(checkbox) {
     const eneatipo = checkbox.getAttribute('data-eneatipo');
 
-    // Verifica si la variable eX existe antes de incrementar/decrementar
+    // Verifica si la variable correspondiente existe antes de sumar
     if (checkbox.checked) {
-        if (window["e" + eneatipo] !== undefined) {
-            window["e" + eneatipo]++;
-            respondidas++;
+        switch (eneatipo) {
+            case '1': e1++; break;
+            case '2': e2++; break;
+            case '3': e3++; break;
+            case '4': e4++; break;
+            case '5': e5++; break;
+            case '6': e6++; break;
+            case '7': e7++; break;
+            case '8': e8++; break;
+            case '9': e9++; break;
         }
+        respondidas++;
     } else {
-        if (window["e" + eneatipo] !== undefined) {
-            window["e" + eneatipo]--;
-            respondidas--;
+        switch (eneatipo) {
+            case '1': e1--; break;
+            case '2': e2--; break;
+            case '3': e3--; break;
+            case '4': e4--; break;
+            case '5': e5--; break;
+            case '6': e6--; break;
+            case '7': e7--; break;
+            case '8': e8--; break;
+            case '9': e9--; break;
         }
+        respondidas--;
     }
 }
 
@@ -86,16 +94,29 @@ function cargarAfirmacionesYMostrarHtml() {
 async function devolver() {
     await fetchDevoluciones();
 
-    if ((e1 - media) >= devStandard) {
-        ge1 = devoluciones.find(item => item.e === '1' && item.id === 'eneatipo').descripcion;
-    } else if ((e1 - media) <= -devStandard) {
-        ge1 = devoluciones.find(item => item.e === '1' && item.id === 'ausente').descripcion;
-    } else if ((e1 - media) >= 0 && (e1 - media) < devStandard) {
-        ge1 = devoluciones.find(item => item.e === '1' && item.id === 'atributo').descripcion;
+    // Lógica para asignar las devoluciones a las variables ge1, ge2, ..., ge9
+    ge1 = devolverAtributo(e1, "1");
+    ge2 = devolverAtributo(e2, "2");
+    ge3 = devolverAtributo(e3, "3");
+    ge4 = devolverAtributo(e4, "4");
+    ge5 = devolverAtributo(e5, "5");
+    ge6 = devolverAtributo(e6, "6");
+    ge7 = devolverAtributo(e7, "7");
+    ge8 = devolverAtributo(e8, "8");
+    ge9 = devolverAtributo(e9, "9");
+}
+
+// Función auxiliar para devolver la descripción de un atributo específico
+function devolverAtributo(valor, tipo) {
+    if ((valor - media) >= devStandard) {
+        return devoluciones.find(item => item.e === tipo && item.id === 'eneatipo').descripcion;
+    } else if ((valor - media) <= -devStandard) {
+        return devoluciones.find(item => item.e === tipo && item.id === 'ausente').descripcion;
+    } else if ((valor - media) >= 0 && (valor - media) < devStandard) {
+        return devoluciones.find(item => item.e === tipo && item.id === 'atributo').descripcion;
     } else {
-        ge1 = devoluciones.find(item => item.e === '1' && item.id === 'atributono').descripcion;
+        return devoluciones.find(item => item.e === tipo && item.id === 'atributono').descripcion;
     }
-    // Repite la misma lógica para ge2, ge3, ..., ge9 con sus correspondientes valores de e2, e3, etc.
 }
 
 // Realiza los cálculos necesarios para los resultados
@@ -160,7 +181,7 @@ botonEnviar.onclick = async () => {
     };
 
     sessionStorage.setItem("sesion", JSON.stringify(guardado));
-    guardarEnLocalStorage(guardado, nombre);
+    localStorage.setItem(nombre, JSON.stringify(guardado));
 
     // Abre la página de resultados en la misma pestaña
     window.location.href = "./html/devolucion.html";
