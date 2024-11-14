@@ -59,13 +59,18 @@ function mostrarMezclaHtml() {
 // Función para cargar y validar las selecciones de las afirmaciones
 function cargarVariables(checkbox) {
     const eneatipo = checkbox.getAttribute('data-eneatipo');
-    
+
+    // Verifica si la variable eX existe antes de incrementar/decrementar
     if (checkbox.checked) {
-        window["e" + eneatipo]++;
-        respondidas++;
+        if (window["e" + eneatipo] !== undefined) {
+            window["e" + eneatipo]++;
+            respondidas++;
+        }
     } else {
-        window["e" + eneatipo]--;
-        respondidas--;
+        if (window["e" + eneatipo] !== undefined) {
+            window["e" + eneatipo]--;
+            respondidas--;
+        }
     }
 }
 
