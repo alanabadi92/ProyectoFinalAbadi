@@ -1,7 +1,7 @@
 // Variables globales
 let afirmaciones = [];
 let devoluciones = [];
-let respondidas = 0;
+let respondidas = 0;  // Declaración de 'respondidas' para evitar errores
 let porcentajeRespondidas = 0;
 let media = 0;
 let devStandard = 0;
