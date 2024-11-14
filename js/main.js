@@ -1,24 +1,34 @@
-// Recupero las afirmaciones del JSON
+// Variables globales
+let afirmaciones = [];
+let devoluciones = [];
+let respondidas = 0;
+let porcentajeRespondidas = 0;
+let media = 0;
+let devStandard = 0;
+let e1 = 0, e2 = 0, e3 = 0, e4 = 0, e5 = 0, e6 = 0, e7 = 0, e8 = 0, e9 = 0;
+let ge1 = "", ge2 = "", ge3 = "", ge4 = "", ge5 = "", ge6 = "", ge7 = "", ge8 = "", ge9 = "";
+
+// Función para recuperar afirmaciones desde el JSON
 const fetchAfirmaciones = async () => {
     try {
-        let resp = await fetch('https://raw.githubusercontent.com/alanabadi92/ProyectoFinalAbadi/main/json/afirmaciones.json');
+        const resp = await fetch('https://raw.githubusercontent.com/alanabadi92/ProyectoFinalAbadi/main/json/afirmaciones.json');
         afirmaciones = await resp.json();
     } catch (error) {
-        console.error('No se pudo cargar las afirmaciones', error);
+        console.error('No se pudo cargar las afirmaciones:', error);
     }
 };
 
-// Recupero las devoluciones del JSON
+// Función para recuperar devoluciones desde el JSON
 const fetchDevoluciones = async () => {
     try {
-        let resp = await fetch('https://raw.githubusercontent.com/alanabadi92/ProyectoFinalAbadi/main/json/devoluciones.json');
+        const resp = await fetch('https://raw.githubusercontent.com/alanabadi92/ProyectoFinalAbadi/main/json/devoluciones.json');
         devoluciones = await resp.json();
     } catch (error) {
-        console.error('No se pudo cargar las devoluciones', error);
+        console.error('No se pudo cargar las devoluciones:', error);
     }
 };
 
-// Guarda datos de usuario en localStorage en lugar de descargar JSON automáticamente
+// Función para guardar datos de usuario en localStorage
 function guardarEnLocalStorage(objeto, nombre) {
     try {
         localStorage.setItem(nombre, JSON.stringify(objeto));
@@ -33,15 +43,20 @@ function shuffleArray(array) {
     array.sort(() => Math.random() - 0.5);
 }
 
-// Muestra las afirmaciones mezcladas en el HTML
+// Muestra las afirmaciones en el HTML
 function mostrarMezclaHtml() {
     const lista = document.getElementById('listaAfirmaciones');
+    lista.innerHTML = "";  // Limpia el contenido previo
+
     afirmaciones.forEach(afirmacion => {
-        lista.innerHTML += `<li> <input type="checkbox" onchange="cargarVariables(this)" id=${afirmacion.eneatipo} > <label class="afirmaciones">${afirmacion.texto}</label> </li>`;
+        lista.innerHTML += `<li> 
+            <input type="checkbox" onchange="cargarVariables(this)" id=${afirmacion.eneatipo} > 
+            <label class="afirmaciones">${afirmacion.texto}</label> 
+        </li>`;
     });
 }
 
-// Carga y valida los checks
+// Función para cargar y validar las selecciones de las afirmaciones
 function cargarVariables(checkbox) {
     if (checkbox.checked) {
         window["e" + checkbox.id]++;
@@ -52,7 +67,7 @@ function cargarVariables(checkbox) {
     }
 }
 
-// Mezcla las afirmaciones y las carga en el HTML
+// Mezcla las afirmaciones y las muestra en el HTML
 function cargarAfirmacionesYMostrarHtml() {
     fetchAfirmaciones().then(() => {
         shuffleArray(afirmaciones);
@@ -60,17 +75,26 @@ function cargarAfirmacionesYMostrarHtml() {
     });
 }
 
-// Procesa las devoluciones en función de las variables "e"
+// Procesa las devoluciones
 async function devolver() {
     await fetchDevoluciones();
-    // Procesa y almacena devoluciones en variables ge1, ge2, ..., ge9
-    // Código para asignar las descripciones a cada ge
-    // ...
+
+    // Lógica para asignar las devoluciones a las variables ge1, ge2, ..., ge9
+    if ((e1 - media) >= devStandard) {
+        ge1 = devoluciones.find(item => item.e === '1' && item.id === 'eneatipo').descripcion;
+    } else if ((e1 - media) <= -devStandard) {
+        ge1 = devoluciones.find(item => item.e === '1' && item.id === 'ausente').descripcion;
+    } else if ((e1 - media) >= 0 && (e1 - media) < devStandard) {
+        ge1 = devoluciones.find(item => item.e === '1' && item.id === 'atributo').descripcion;
+    } else {
+        ge1 = devoluciones.find(item => item.e === '1' && item.id === 'atributono').descripcion;
+    }
+    // Repite la misma lógica para ge2, ge3, ..., ge9 con sus correspondientes valores de e2, e3, etc.
 }
 
-// Realiza los cálculos para mostrar resultados
+// Realiza los cálculos necesarios para los resultados
 function operar() {
-    porcentajeRespondidas = ((respondidas * 100) / (afirmaciones.length));
+    porcentajeRespondidas = ((respondidas * 100) / afirmaciones.length);
     media = ((e1 + e2 + e3 + e4 + e5 + e6 + e7 + e8 + e9) / 9);
 
     const atributos = [e1, e2, e3, e4, e5, e6, e7, e8, e9];
@@ -82,11 +106,10 @@ function operar() {
     devStandard = Math.sqrt(sumatoria / (9 - 1));
 }
 
-// Botón cargar archivo
+// Botón para cargar archivo JSON desde Swal
 const botonCargar = document.getElementById("cargar");
 botonCargar.onclick = () => {
-    // Código para cargar archivo JSON con Swal
-    pedirArchivo();
+    pedirArchivo(); // Esta función debería estar definida para usar Swal y cargar un archivo JSON
 };
 
 // Botón para borrar datos
@@ -136,5 +159,3 @@ botonEnviar.onclick = async () => {
     // Abre la página de resultados en la misma pestaña
     window.location.href = "./html/devolucion.html";
 };
-
-// Fin del programa
