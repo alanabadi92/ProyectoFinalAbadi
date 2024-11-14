@@ -2,13 +2,8 @@
 let afirmaciones = [];
 let devoluciones = [];
 let respondidas = 0;
-let porcentajeRespondidas = 0;
-let media = 0;
-let devStandard = 0;
-
-// Variables para cada tipo de respuesta del Eneagrama
 let atributos = { e1: 0, e2: 0, e3: 0, e4: 0, e5: 0, e6: 0, e7: 0, e8: 0, e9: 0 };
-let devolucionesAtributos = { a1: "", a2: "", a3: "", a4: "", a5: "", a6: "", a7: "", a8: "", a9: "" };
+let devolucionesAtributos = { ge1: "", ge2: "", ge3: "", ge4: "", ge5: "", ge6: "", ge7: "", ge8: "", ge9: "" };
 
 // Recupera afirmaciones desde el JSON
 const fetchAfirmaciones = async () => {
@@ -40,7 +35,7 @@ function shuffleArray(array) {
 function cargarAfirmacionesYMostrarHtml() {
     shuffleArray(afirmaciones);
     const lista = document.getElementById('listaAfirmaciones');
-    lista.innerHTML = "";
+    lista.innerHTML = "";  
 
     afirmaciones.forEach(afirmacion => {
         lista.innerHTML += `<li> 
@@ -63,13 +58,20 @@ function cargarVariables(checkbox) {
     }
 }
 
-// Procesa las devoluciones en función de los valores obtenidos
-async function devolver() {
-    await fetchDevoluciones();
+// Calcula media y desviación estándar
+function calcularEstadisticas() {
+    const valores = Object.values(atributos);
+    const media = valores.reduce((acc, val) => acc + val, 0) / valores.length;
+    const sumatoria = valores.reduce((acc, val) => acc + Math.pow(val - media, 2), 0);
+    const devStandard = Math.sqrt(sumatoria / (valores.length - 1));
+    return { media, devStandard };
+}
 
+// Procesa las devoluciones en función de los valores obtenidos
+function procesarDevoluciones(media, devStandard) {
     for (let i = 1; i <= 9; i++) {
         const eneatipoKey = `e${i}`;
-        const devolucionKey = `a${i}`;
+        const devolucionKey = `ge${i}`;
         const valor = atributos[eneatipoKey] - media;
 
         if (valor >= devStandard) {
@@ -84,39 +86,30 @@ async function devolver() {
     }
 }
 
-// Realiza los cálculos necesarios para los resultados
-function operar() {
-    porcentajeRespondidas = ((respondidas * 100) / afirmaciones.length);
-    media = Object.values(atributos).reduce((a, b) => a + b, 0) / 9;
+// Función para guardar y redirigir con los datos correctos
+async function guardarYRedirigir() {
+    const nombre = document.getElementById("inputNombre").value;
+    const { media, devStandard } = calcularEstadisticas();
 
-    const sumatoria = Object.values(atributos).reduce((acc, valor) => acc + Math.pow(valor - media, 2), 0);
-    devStandard = Math.sqrt(sumatoria / 8); // n-1 donde n es 9
-}
-
-// Botón enviar que procesa, guarda y redirige a la página de resultados
-const botonEnviar = document.getElementById('enviar');
-botonEnviar.onclick = async () => {
-    operar();
-    await devolver();
-
-    let nombre = document.getElementById("inputNombre").value;
+    await fetchDevoluciones();
+    procesarDevoluciones(media, devStandard);
 
     const guardado = {
-        resp: respondidas,
         nombre: nombre,
-        porcentaje: porcentajeRespondidas,
-        media: media,
-        desv: devStandard,
-        v1: atributos.e1, v2: atributos.e2, v3: atributos.e3, v4: atributos.e4, v5: atributos.e5,
-        v6: atributos.e6, v7: atributos.e7, v8: atributos.e8, v9: atributos.e9,
+        respondidas,
+        porcentaje: ((respondidas * 100) / afirmaciones.length).toFixed(2),
+        media,
+        devStandard,
+        ...atributos,
         ...devolucionesAtributos
     };
 
     sessionStorage.setItem("sesion", JSON.stringify(guardado));
-    localStorage.setItem(nombre, JSON.stringify(guardado));
-
     window.location.href = "./html/devolucion.html";
-};
+}
+
+// Evento de botón enviar
+document.getElementById('enviar').onclick = guardarYRedirigir;
 
 // Cargar afirmaciones al inicio
 fetchAfirmaciones();
